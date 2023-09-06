@@ -8,6 +8,7 @@ import 'package:manage_exercise_records/bloc/category_image/category_image_event
 import 'package:manage_exercise_records/bloc/login/login_bloc.dart';
 import 'package:manage_exercise_records/bloc/login/login_state.dart';
 import 'package:manage_exercise_records/common/consts.dart';
+import 'package:manage_exercise_records/common/widget/snackbar.dart';
 import 'package:manage_exercise_records/view/history_exercise_view.dart';
 import 'package:manage_exercise_records/view/login_view.dart';
 import 'package:manage_exercise_records/view/record_exercise_view.dart';
@@ -129,15 +130,7 @@ class _MainView extends State<MainView> {
 
   Future<void> _onItemTapped(BuildContext context, int index) async {
     if (_loginInfo == false && index != 2) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'You are not logged in. Please proceed to log in.',
-            textAlign: TextAlign.center,
-          ),
-          duration: Duration(seconds: 3),
-        ),
-      );
+      snackBarWithText(context, 'You are not logged in. Please proceed to login.');
       return;
     }
     if (index == 0 || index == 1) {

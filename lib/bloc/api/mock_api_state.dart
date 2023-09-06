@@ -47,3 +47,10 @@ class RecordDataLoaded extends MockApiState {
   @override
   List<Object> get props => [ExerciseData];
 }
+
+class MockApiStateChanged extends MockApiState {
+  const MockApiStateChanged();
+
+  @override
+  List<Object> get props => [];
+}

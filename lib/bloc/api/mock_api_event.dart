@@ -13,3 +13,7 @@ class GetRecordExerciseApi extends MockApiEvent {
   final String type;
   GetRecordExerciseApi(this.type);
 }
+
+class StateUpdate extends MockApiEvent {
+  StateUpdate();
+}

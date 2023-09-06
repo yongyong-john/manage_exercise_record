@@ -11,6 +11,7 @@ class MockApiBloc extends Bloc<MockApiEvent, MockApiState> {
   MockApiBloc() : super(const MockApiInitial()) {
     on<PostRecordExerciseApi>(_onPostRecordExerciseApi);
     on<GetRecordExerciseApi>(_onGetRecordExerciseApi);
+    on<StateUpdate>(_onStateUpdate);
   }
 
   Future<void> _onPostRecordExerciseApi(PostRecordExerciseApi event, Emitter<MockApiState> emit) async {
@@ -48,5 +49,9 @@ class MockApiBloc extends Bloc<MockApiEvent, MockApiState> {
       return;
     }
     emit(RecordDataLoaded(exerciseDataList));
+  }
+
+  void _onStateUpdate(StateUpdate event, Emitter<MockApiState> emit) {
+    emit(const MockApiStateChanged());
   }
 }

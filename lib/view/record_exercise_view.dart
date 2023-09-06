@@ -63,88 +63,102 @@ class _RecordExerciseView extends State<RecordExerciseView> {
           _imagePath = state.categoryImagePath;
           category = state.category;
         }
-        return BlocBuilder<MockApiBloc, MockApiState>(builder: (context, state) {
-          if (state is RecordDataPostFailed) {
-            snackBarWithText(context, 'Failed to upload exercise.');
-          } else if (state is RecordDataGetFailed) {
-            snackBarWithText(context, 'Failed to get exercise history.');
-          }
-          return Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+        return BlocBuilder<MockApiBloc, MockApiState>(
+          builder: (context, state) {
+            if (state is RecordDataPostFailed) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                snackBarWithText(context, 'Failed to upload exercise.');
+                BlocProvider.of<MockApiBloc>(context).add(StateUpdate());
+              });
+            } else if (state is RecordDataGetFailed) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                snackBarWithText(context, 'Failed to get exercise history.');
+                BlocProvider.of<MockApiBloc>(context).add(StateUpdate());
+              });
+            } else if (state is RecordDataUpdated) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                snackBarWithText(context, 'Succeed to upload exercise record.');
+                Navigator.pop(context);
+                BlocProvider.of<MockApiBloc>(context).add(StateUpdate());
+              });
+            }
+            return Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                title: Text(category),
               ),
-              title: Text(category),
-            ),
-            body: SingleChildScrollView(
-              child: GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).unfocus();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      _imagePath.isNotEmpty
-                          ? Image.asset(
-                              _imagePath,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                            )
-                          : Container(),
-                      const SizedBox(height: 16),
-                      ListTile(
-                        title: Text(selectedDateTime),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
+              body: SingleChildScrollView(
+                child: GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        _imagePath.isNotEmpty
+                            ? Image.asset(
+                                _imagePath,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                              )
+                            : Container(),
+                        const SizedBox(height: 16),
+                        ListTile(
+                          title: Text(selectedDateTime),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.calendar_today),
+                                onPressed: () => _selectDate(context),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.access_time),
+                                onPressed: () => _selectTime(context),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Message Textfield
+                        TextField(
+                          controller: _messageController,
+                          maxLines: 2,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Message',
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Buttons
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            IconButton(
-                              icon: const Icon(Icons.calendar_today),
-                              onPressed: () => _selectDate(context),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.access_time),
-                              onPressed: () => _selectTime(context),
+                            ElevatedButton(
+                              onPressed: () {
+                                BlocProvider.of<MockApiBloc>(context)
+                                    .add(PostRecordExerciseApi(category, selectedDateTime, _messageController.text));
+                              },
+                              child: const Text('Save'),
                             ),
                           ],
                         ),
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Message Textfield
-                      TextField(
-                        controller: _messageController,
-                        maxLines: 2,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Message',
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Buttons
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              BlocProvider.of<MockApiBloc>(context)
-                                  .add(PostRecordExerciseApi(category, selectedDateTime, _messageController.text));
-                            },
-                            child: const Text('Save'),
-                          ),
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        });
+            );
+          },
+        );
       },
     );
   }

@@ -36,7 +36,9 @@ class _LoginViewState extends State<LoginView> {
           isLoggedIn = false;
           passwordController.text = '';
         } else if (state is LoginFailure) {
-          snackBarWithText(context, 'Failed to login. Please check password and try again.');
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            snackBarWithText(context, 'Failed to login. Please check password and try again.');
+          });
         } else if (state is LoginLoading) {
           return const SizedBox(
             width: 30,
