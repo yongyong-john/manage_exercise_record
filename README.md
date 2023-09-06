@@ -1,6 +1,6 @@
 # manage_exercise_records
 
-A new Flutter project.
+[MockApiUrl](https://mockapi.io/projects/64f7dc29824680fd217ee2bc)
 
 ## Getting Started
 
