@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:manage_exercise_records/bloc/login/login_bloc.dart';
 import 'package:manage_exercise_records/bloc/login/login_event.dart';
 import 'package:manage_exercise_records/bloc/login/login_state.dart';
+import 'package:manage_exercise_records/common/widget/snackbar.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -16,12 +17,12 @@ class _LoginViewState extends State<LoginView> {
   bool isLoggedIn = false;
 
   void _performLogin() {
-    BlocProvider.of<LoginBloc>(context).add(CheckMatchPassword(context, passwordController.text));
+    BlocProvider.of<LoginBloc>(context).add(CheckMatchPassword(passwordController.text));
   }
 
   void _performLogout() {
     setState(() {
-      BlocProvider.of<LoginBloc>(context).add(CheckMatchPassword(context, null));
+      BlocProvider.of<LoginBloc>(context).add(CheckMatchPassword(null));
     });
   }
 
@@ -35,7 +36,7 @@ class _LoginViewState extends State<LoginView> {
           isLoggedIn = false;
           passwordController.text = '';
         } else if (state is LoginFailure) {
-          // Do nothing
+          snackBarWithText(context, 'Failed to login. Please check password and try again.');
         } else if (state is LoginLoading) {
           return const SizedBox(
             width: 30,

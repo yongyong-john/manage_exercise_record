@@ -3,7 +3,6 @@ import 'package:manage_exercise_records/bloc/login/login_event.dart';
 import 'package:manage_exercise_records/bloc/login/login_state.dart';
 import 'package:manage_exercise_records/common/consts.dart';
 import 'package:manage_exercise_records/common/crypto.dart';
-import 'package:manage_exercise_records/common/widget/snackbar.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(const LoginInitial()) {
@@ -22,7 +21,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       emit(const LoginSuccess());
     } else {
       emit(const LoginFailure());
-      snackBarWithText(event.context, 'Failed to login. Please check password and try again.');
     }
   }
 }

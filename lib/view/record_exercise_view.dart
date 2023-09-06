@@ -6,6 +6,7 @@ import 'package:manage_exercise_records/bloc/api/mock_api_event.dart';
 import 'package:manage_exercise_records/bloc/api/mock_api_state.dart';
 import 'package:manage_exercise_records/bloc/category_image/category_image_bloc.dart';
 import 'package:manage_exercise_records/bloc/category_image/category_image_state.dart';
+import 'package:manage_exercise_records/common/widget/snackbar.dart';
 
 class RecordExerciseView extends StatefulWidget {
   const RecordExerciseView({Key? key}) : super(key: key);
@@ -63,7 +64,11 @@ class _RecordExerciseView extends State<RecordExerciseView> {
           category = state.category;
         }
         return BlocBuilder<MockApiBloc, MockApiState>(builder: (context, state) {
-          if (state is RecordDataFailed) {}
+          if (state is RecordDataPostFailed) {
+            snackBarWithText(context, 'Failed to upload exercise.');
+          } else if (state is RecordDataGetFailed) {
+            snackBarWithText(context, 'Failed to get exercise history.');
+          }
           return Scaffold(
             appBar: AppBar(
               leading: IconButton(
@@ -126,8 +131,8 @@ class _RecordExerciseView extends State<RecordExerciseView> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              BlocProvider.of<MockApiBloc>(context).add(
-                                  PostRecordExerciseApi(context, category, selectedDateTime, _messageController.text));
+                              BlocProvider.of<MockApiBloc>(context)
+                                  .add(PostRecordExerciseApi(category, selectedDateTime, _messageController.text));
                             },
                             child: const Text('Save'),
                           ),

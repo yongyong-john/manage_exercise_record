@@ -26,8 +26,15 @@ class RecordDataUpdated extends MockApiState {
   List<Object> get props => [];
 }
 
-class RecordDataFailed extends MockApiState {
-  const RecordDataFailed();
+class RecordDataPostFailed extends MockApiState {
+  const RecordDataPostFailed();
+
+  @override
+  List<Object> get props => [];
+}
+
+class RecordDataGetFailed extends MockApiState {
+  const RecordDataGetFailed();
 
   @override
   List<Object> get props => [];

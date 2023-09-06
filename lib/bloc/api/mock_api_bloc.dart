@@ -6,7 +6,6 @@ import 'package:manage_exercise_records/bloc/api/mock_api_event.dart';
 import 'package:manage_exercise_records/bloc/api/mock_api_state.dart';
 import 'package:manage_exercise_records/common/consts.dart';
 import 'package:manage_exercise_records/common/data/data_class.dart';
-import 'package:manage_exercise_records/common/widget/snackbar.dart';
 
 class MockApiBloc extends Bloc<MockApiEvent, MockApiState> {
   MockApiBloc() : super(const MockApiInitial()) {
@@ -28,8 +27,7 @@ class MockApiBloc extends Bloc<MockApiEvent, MockApiState> {
       print('status=${response.statusCode}');
       print('body=${jsonDecode(response.body)}');
     } catch (e) {
-      emit(const RecordDataFailed());
-      snackBarWithText(event.context, 'Failed to record exercise [${event.type}].');
+      emit(const RecordDataPostFailed());
       return;
     }
     emit(const RecordDataUpdated());
@@ -46,8 +44,7 @@ class MockApiBloc extends Bloc<MockApiEvent, MockApiState> {
       List<dynamic> list = jsonDecode(response.body);
       exerciseDataList = list.map((item) => ExerciseData.fromJson(item)).toList();
     } catch (e) {
-      emit(const RecordDataFailed());
-      snackBarWithText(event.context, 'Failed to get exercise [${event.type}] history.');
+      emit(const RecordDataGetFailed());
       return;
     }
     emit(RecordDataLoaded(exerciseDataList));
