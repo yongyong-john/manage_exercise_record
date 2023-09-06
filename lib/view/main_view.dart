@@ -65,23 +65,30 @@ class _MainView extends State<MainView> {
     }
   }
 
-  ListTile buildListTile(String title, String image, OverlayEntry overlayEntry, BuildContext context) {
+  ListTile buildListTile(BuildContext context, int index, String title, String image, OverlayEntry overlayEntry) {
     return ListTile(
       title: Text(title),
       onTap: () async {
         BlocProvider.of<CategoryImageBloc>(context).add(SetCategoryImage(title, image));
         overlayEntry.remove();
         _controller.pause();
-        await Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const RecordExerciseView()),
-        );
+        if (index == 0) {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const RecordExerciseView()),
+          );
+        } else if (index == 1) {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HistoryExerciseView()),
+          );
+        }
         _controller.play();
       },
     );
   }
 
-  void _showOverlay(BuildContext context) {
+  void _showOverlay(BuildContext context, int index) {
     late OverlayEntry overlayEntry;
     overlayEntry = OverlayEntry(
       builder: (context) => Stack(
@@ -106,10 +113,10 @@ class _MainView extends State<MainView> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  buildListTile(lunge, lungeImage, overlayEntry, context),
-                  buildListTile(squat, squatImage, overlayEntry, context),
-                  buildListTile(pushUp, pushUpImage, overlayEntry, context),
-                  buildListTile(legRaises, legRaisesImage, overlayEntry, context),
+                  buildListTile(context, index, lunge, lungeImage, overlayEntry),
+                  buildListTile(context, index, squat, squatImage, overlayEntry),
+                  buildListTile(context, index, pushUp, pushUpImage, overlayEntry),
+                  buildListTile(context, index, legRaises, legRaisesImage, overlayEntry),
                 ],
               ),
             ),
@@ -133,15 +140,8 @@ class _MainView extends State<MainView> {
       );
       return;
     }
-    if (index == 0) {
-      _showOverlay(context);
-    } else if (index == 1) {
-      _controller.pause();
-      await Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const HistoryExerciseView()),
-      );
-      _controller.play();
+    if (index == 0 || index == 1) {
+      _showOverlay(context, index);
     } else if (index == 2) {
       _controller.pause();
       await Navigator.push(
@@ -192,7 +192,7 @@ class _MainView extends State<MainView> {
       builder: (context, state) {
         if (state is LoginSuccess) {
           _loginInfo = true;
-        } else if (state is LoginFailure) {
+        } else if (state is LoginFailure || state is LoginNotYet) {
           _loginInfo = false;
         }
         return Scaffold(

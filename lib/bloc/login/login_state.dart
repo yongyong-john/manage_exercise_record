@@ -32,13 +32,6 @@ class LoginFailure extends LoginState {
   List<Object> get props => [];
 }
 
-class LoginAlready extends LoginState {
-  const LoginAlready();
-
-  @override
-  List<Object> get props => [];
-}
-
 class LoginNotYet extends LoginState {
   const LoginNotYet();
 

@@ -4,7 +4,6 @@ import 'package:manage_exercise_records/bloc/ad_video/ad_video_bloc.dart';
 import 'package:manage_exercise_records/bloc/api/mock_api_bloc.dart';
 import 'package:manage_exercise_records/bloc/category_image/category_image_bloc.dart';
 import 'package:manage_exercise_records/bloc/login/login_bloc.dart';
-import 'package:manage_exercise_records/repository/interface/ilogin_info_repository.dart';
 import 'package:manage_exercise_records/view/main_view.dart';
 
 class ManageExerciseRecords extends StatefulWidget {
@@ -23,9 +22,7 @@ class _ManageExerciseRecords extends State<ManageExerciseRecords> {
           create: (BuildContext context) => CategoryImageBloc(),
         ),
         BlocProvider<LoginBloc>(
-          create: (BuildContext context) => LoginBloc(
-            loginInfoRepository: LoginInfoRepository(),
-          ),
+          create: (BuildContext context) => LoginBloc(),
         ),
         BlocProvider<AdVideoBloc>(
           create: (BuildContext context) => AdVideoBloc(),

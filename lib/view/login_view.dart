@@ -27,14 +27,15 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<LoginBloc>(context).add(LoadLoginInfo());
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
-        if (state is LoginAlready || state is LoginSuccess) {
+        if (state is LoginSuccess) {
           isLoggedIn = true;
-        } else if (state is LoginNotYet || state is LoginNotYet) {
+        } else if (state is LoginNotYet) {
           isLoggedIn = false;
           passwordController.text = '';
+        } else if (state is LoginFailure) {
+          // Do nothing
         } else if (state is LoginLoading) {
           return const SizedBox(
             width: 30,

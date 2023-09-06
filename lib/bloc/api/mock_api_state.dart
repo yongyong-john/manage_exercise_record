@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:manage_exercise_records/common/data.dart';
+import 'package:manage_exercise_records/common/data/data_class.dart';
 
 abstract class MockApiState extends Equatable {
   const MockApiState();
@@ -21,6 +21,13 @@ class MockApiLoading extends MockApiState {
 
 class RecordDataUpdated extends MockApiState {
   const RecordDataUpdated();
+
+  @override
+  List<Object> get props => [];
+}
+
+class RecordDataFailed extends MockApiState {
+  const RecordDataFailed();
 
   @override
   List<Object> get props => [];
