@@ -43,6 +43,7 @@ class MockApiBloc extends Bloc<MockApiEvent, MockApiState> {
       print('status=${response.statusCode}');
       print('body=${jsonDecode(response.body)}');
       List<dynamic> list = jsonDecode(response.body);
+      list.sort((a, b) => b['createdAt'].compareTo(a['createdAt']));
       exerciseDataList = list.map((item) => ExerciseData.fromJson(item)).toList();
     } catch (e) {
       emit(const RecordDataGetFailed());
